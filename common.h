@@ -14,15 +14,6 @@ bool proc(float p) {
     return float(rand()) / RAND_MAX < p;
 }
 
-template <class T>
-bool ckmin(T &a, T b) {
-    return b < a ? a = b, 1 : 0;
-}
-template <class T>
-bool ckmax(T &a, T b) {
-    return a < b ? a = b, 1 : 0;
-}
-
 std::chrono::time_point<std::chrono::high_resolution_clock> timer;
 
 void start_timer() {

@@ -15,23 +15,27 @@ float bounce_anim(float t) {
 
 void view_replay(const auto &b) {
     InitWindow(WINDOW_W, WINDOW_H, "CatJobs v0.1");
-    SetTargetFPS(60);
+    SetTargetFPS(30);
 
     // Coefficient for game coordinates -> pixels on window
     const float ratio = float(WINDOW_W) / (b.stage.width + 2 * MARGIN);
 
+    int speed = 1;
+
     int time = 0;
     while (!WindowShouldClose()) {
 
-        // if (IsKeyDown(KEY_LEFT)) time = std::max(0, time - 1);
-        // if (IsKeyDown(KEY_RIGHT)) time = std::min(int(ssize(b.logs)) - 1, time + 1);
-        time = std::min(int(ssize(b.logs)) - 1, time + 1);
+        if (IsKeyPressed(KEY_LEFT)) speed -= speed > 1;
+        if (IsKeyPressed(KEY_RIGHT)) speed++;
+
+        time = std::clamp(time + speed, 0, b.time - 1);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         DrawText(("Time: " + std::to_string(time) + "f").c_str(), 10, 10, 20, DARKGRAY);
-        DrawText(("Units: " + std::to_string(ssize(b.logs[time]))).c_str(), 10, 35, 20, DARKGRAY);
+        DrawText(("Speed: " + std::to_string(speed) + "x").c_str(), 10, 35, 20, DARKGRAY);
+        DrawText(("Units: " + std::to_string(ssize(b.logs[time]))).c_str(), 10, 60, 20, DARKGRAY);
         
         DrawRectangle(0, WINDOW_H / 2.0f, WINDOW_W, WINDOW_H / 2.0f, LIGHTGRAY);
 

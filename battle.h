@@ -12,6 +12,7 @@
 #include "data.h"
 
 const int UID_RANGE = 10000;
+const int LAYERS = 10;
 
 struct Unit {
     int id, uid;
@@ -96,7 +97,20 @@ struct Battle {
 
                 for (int i = nxt; i >= (data[unit.id].area_attack ? 0 : nxt) && stage.width - opp_units[i].pos <= bound; i--) {
                     if (!opp_units[i].kb_f) {
-                        opp_units[i].delta_hp -= dmg;
+                        int cur = dmg;
+                        if (opp_data[opp_units[i].id].strong & data[unit.id].traits) {
+                            cur /= 2;
+                        }
+                        if (opp_data[opp_units[i].id].traits & data[unit.id].strong) {
+                            cur = (cur * 3) / 2;
+                        }
+                        if (opp_data[opp_units[i].id].traits & data[unit.id].massive) {
+                            cur *= 3;
+                        }
+                        if (opp_data[opp_units[i].id].traits & data[unit.id].insane) {
+                            cur *= 5;
+                        }
+                        opp_units[i].delta_hp -= cur;
                     }
                 }
             }
@@ -107,7 +121,6 @@ struct Battle {
         units.erase(std::remove_if(all(units), [&](Unit &unit) {
             unit.kb_f -= unit.kb_f > 0;
 
-            // if ((unit.hp % data[unit.id].health_per_kb) + unit.delta_hp <= 0) {
             if (cdiv(unit.hp + unit.delta_hp, data[unit.id].health_per_kb) < cdiv(unit.hp, data[unit.id].health_per_kb)) {
                 unit.delta_pos -= KB_DIST;
                 unit.kb_f += KB_DURATION;
@@ -132,8 +145,8 @@ struct Battle {
             logs.back().emplace_back(0, unit);
         }
         std::sort(all(logs.back()), [&](const UnitState &a, const UnitState &b) {
-            if (a.uid % 10 != b.uid % 10) {
-                return a.uid % 10 > b.uid % 10;
+            if (a.uid % LAYERS != b.uid % LAYERS) {
+                return a.uid % LAYERS > b.uid % LAYERS;
             }
             return a.uid < b.uid;
         });
