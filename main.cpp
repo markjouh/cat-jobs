@@ -1,6 +1,5 @@
 #include "raylib.h"
 #include "battle.h"
-#include "data.h"
 #include "view_replay.h"
 #include "benchmarks.h"
 

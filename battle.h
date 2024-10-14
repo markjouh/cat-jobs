@@ -9,7 +9,6 @@
 
 #include "common.h"
 #include "units.h"
-#include "data.h"
 
 const int UID_RANGE = 10000;
 const int LAYERS = 10;
@@ -20,7 +19,7 @@ struct Unit {
     int delta_hp = 0, delta_pos = 0;
     int attack_f = 0, kb_f = 0;
 
-    Unit(int id_, int hp_) : id(id_), uid(rand() % UID_RANGE), hp(hp_) {}
+    Unit(int id_, int hp_) : id(id_), uid(xorshift32() % UID_RANGE), hp(hp_) {}
 };
 
 struct UnitState {
