@@ -3,9 +3,7 @@
 
 #include "raylib.h"
 #include "battle.h"
-
-const int WINDOW_W = 800;
-const int WINDOW_H = 450;
+#include "common.h"
 
 const int MARGIN = 200;
 

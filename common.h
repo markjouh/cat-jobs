@@ -24,6 +24,22 @@ bool proc(float p) {
     return xorshift32() / 4294967296.0f < p;
 }
 
+struct Timer {
+    std::chrono::time_point<std::chrono::high_resolution_clock> clock;
+
+    void set() {
+        clock = std::chrono::high_resolution_clock::now();
+    }
+
+    Timer() {
+        set();
+    }
+
+    long long get() {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - clock).count();
+    }
+};
+
 std::chrono::time_point<std::chrono::high_resolution_clock> timer;
 
 void start_timer() {
@@ -49,5 +65,8 @@ const int KB_DIST = 165, KB_DURATION = 12;
 const int PROC_KB_DIST = 345, PROC_KB_DURATION = 12;
 // Knockbacks from boss shockwaves (large)
 const int BOSS_KB_DIST = 705, BOSS_KB_DURATION = 47;
+
+const int WINDOW_W = 960;
+const int WINDOW_H = 540;
 
 #endif // COMMON_H
