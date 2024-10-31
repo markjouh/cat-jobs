@@ -7,7 +7,7 @@ cats = []
 def num(x):
     return int(x.replace(',', ''))
 
-with open('raw/bcu_en/UnitName.txt') as file:
+with open('../raw/bcu_en/UnitName.txt') as file:
     for line in file:
         line = line.strip()
 
@@ -20,7 +20,7 @@ with open('raw/bcu_en/UnitName.txt') as file:
         for i in range(len(form_names)):
             cats[unit_id].append({'name': form_names[i]})
 
-with open('raw/battlecats_db/cats.csv') as csvfile:
+with open('../raw/battlecats_db/cats.csv') as csvfile:
     table = [row for row in csv.reader(csvfile)][1:]
 
     for row in table:
@@ -231,7 +231,7 @@ with open('raw/battlecats_db/cats.csv') as csvfile:
                         cat['weaken'] = {'targets': targets, 'rate': rate, 'duration': duration, 'effect': int(weaken.group(1))}
 
 
-with open('processed/cats.json', 'w') as fp:
+with open('../parsed/cats.json', 'w') as fp:
     json.dump(cats, fp, indent=2)
 
 print('Processing completed!')
