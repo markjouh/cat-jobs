@@ -3,9 +3,10 @@
 
 #include "raylib.h"
 #include "battle.h"
-#include "common.h"
 
 const int MARGIN = 200;
+const int WINDOW_W = 960;
+const int WINDOW_H = 540;
 
 float bounce_anim(float t) {
     return pow(2, -2 * t) * abs(cos(t * 3.1415926535 * 2.5));
@@ -13,18 +14,22 @@ float bounce_anim(float t) {
 
 void view_replay(const auto &b) {
     InitWindow(WINDOW_W, WINDOW_H, "CatJobs v0.1");
-    SetTargetFPS(30);
+    SetTargetFPS(60);
 
     // Coefficient for game coordinates -> pixels on window
-    const float ratio = float(WINDOW_W) / (b.stage.width + 2 * MARGIN);
+    const float ratio = float(WINDOW_W) / (b.stage_width + 2 * MARGIN);
 
     int speed = 1;
 
     int time = 0;
     while (!WindowShouldClose()) {
 
-        if (IsKeyPressed(KEY_LEFT)) speed -= speed > 1;
-        if (IsKeyPressed(KEY_RIGHT)) speed++;
+        if (IsKeyPressed(KEY_LEFT)) {
+            speed -= speed > 1;
+        }
+        if (IsKeyPressed(KEY_RIGHT)) {
+            speed++;
+        }
 
         time = std::clamp(time + speed, 0, b.time - 1);
 
@@ -39,7 +44,7 @@ void view_replay(const auto &b) {
 
         for (auto unit : b.logs[time]) {
             if (unit.is_cat) {
-                unit.pos = b.stage.width - unit.pos;
+                unit.pos = b.stage_width - unit.pos;
             }
 
             Vector2 pos = {
@@ -51,7 +56,7 @@ void view_replay(const auto &b) {
                 pos.y -= ratio * 75.0f * bounce_anim(unit.kb_frac);
             }
 
-            float rad = 5e4 / b.stage.width;
+            float rad = 5e4 / b.stage_width;
             Color fill_color = unit.is_cat ? ORANGE : MAROON, line_color = BLACK;
             DrawCircleV(pos, rad, fill_color);
             DrawCircleLinesV(pos, rad, line_color);

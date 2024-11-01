@@ -3,43 +3,51 @@
 
 #include <cstdint>
 
-#include "common.h"
+#include "utils/defines.h"
+#include "utils/arithmetic.h"
 
-const uint16_t TRAITLESS = 1 << 0;
-const uint16_t RED_T = 1 << 1;
-const uint16_t FLOATING = 1 << 2;
-const uint16_t BLACK_T = 1 << 3;
-const uint16_t METAL = 1 << 4;
-const uint16_t ANGEL = 1 << 5;
-const uint16_t ALIEN = 1 << 6;
-const uint16_t ZOMBIE = 1 << 7;
-const uint16_t AKU = 1 << 8;
-const uint16_t RELIC = 1 << 9;
-const uint16_t COLOSSUS = 1 << 10;
-const uint16_t BEHEMOTH = 1 << 11;
-const uint16_t SAGE = 1 << 12;
-const uint16_t TYPELESS = 1 << 13;
-const uint16_t ALL_TRAITS = (1 << 14) - 1;
-const uint16_t TRAITED = ALL_TRAITS ^ TRAITLESS;
+// Knockbacks from going under an HP cutoff
+const int KB_DIST = 165, KB_DURATION = 12;
+// Knockbacks from ability procs and sniper the cat (small)
+const int PROC_KB_DIST = 345, PROC_KB_DURATION = 12;
+// Knockbacks from boss shockwaves (large)
+const int BOSS_KB_DIST = 705, BOSS_KB_DURATION = 47;
 
-const uint16_t WEAKEN = 1 << 0;
-const uint16_t FREEZE = 1 << 1;
-const uint16_t SLOW = 1 << 2;
-const uint16_t KNOCKBACK = 1 << 3;
-const uint16_t WAVE = 1 << 4;
-const uint16_t SURGE = 1 << 5;
-const uint16_t WARP = 1 << 6;
-const uint16_t CURSE = 1 << 7;
-const uint16_t TOXIC = 1 << 8;
-const uint16_t SHOCKWAVE = 1 << 9;
-const uint16_t ALL_IMMUNITIES = (1 << 10) - 1;
+const u16 TRAITLESS = BIT(0);
+const u16 RED_T = BIT(1);
+const u16 FLOATING = BIT(2);
+const u16 BLACK_T = BIT(3);
+const u16 METAL = BIT(4);
+const u16 ANGEL = BIT(5);
+const u16 ALIEN = BIT(6);
+const u16 ZOMBIE = BIT(7);
+const u16 AKU = BIT(8);
+const u16 RELIC = BIT(9);
+const u16 COLOSSUS = BIT(10);
+const u16 BEHEMOTH = BIT(11);
+const u16 SAGE = BIT(12);
+const u16 TYPELESS = BIT(13);
+const u16 ALL_TRAITS = MASK(14);
+const u16 TRAITED = ALL_TRAITS ^ TRAITLESS;
+
+const u16 WEAKEN = BIT(0);
+const u16 FREEZE = BIT(1);
+const u16 SLOW = BIT(2);
+const u16 KNOCKBACK = BIT(3);
+const u16 WAVE = BIT(4);
+const u16 SURGE = BIT(5);
+const u16 WARP = BIT(6);
+const u16 CURSE = BIT(7);
+const u16 TOXIC = BIT(8);
+const u16 SHOCKWAVE = BIT(9);
+const u16 ALL_IMMUNITIES = BIT(10);
 
 struct UnitData {
     const int id;
     const char* name = "Unnamed unit";
 
-    const uint16_t traits = 0, immunities = 0;
-    const uint16_t strong = 0, massive = 0, insane = 0;
+    const u16 traits = 0, immunities = 0;
+    const u16 strong = 0, massive = 0, insane = 0;
 
     const int range;
     const bool area_attack = false;
