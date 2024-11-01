@@ -9,7 +9,14 @@ Everything else can be handled by storing a small piece of data linking it to so
 
 ## Unit Classes
 In a battle, there are only 10 distinct cat classes, and around the same order of magnitude for enemies. Modifiers like combos or magnifications don't change this.
+Since the properties of these classes don't change, we only need to prepare them once before the start of the battle.  
 
-Since the properties of these classes don't change, we only need to prepare them once before the start of the battle.
-Further, since there are also fairly few cat-enemy pairs, we can precompute a lot of things we'd normally need to calculate every time they interact.
+However, we can break this idea down even further. The idea is that some pieces of info within each class are only relevant in the context of cat-enemy interactions.
+
+### Relationships
+Since there are fairly few cat-enemy class pairs, we can precompute a lot of things we'd normally need to calculate every time they interact.
 Things like attack/defense multipliers, chance of ability proc, and things like that can be encoded into small vectors.
+Once we've done this, we no longer need to store those pieces of info.
+
+### Blueprints
+This is just everything else. The reason for this name is because this set of data contains everything we need to construct a unit instance, plus a bit of extra info describing the unit's core behavior.
