@@ -1,4 +1,4 @@
 .DS_Store
-catjobs.dSYM/
+*.dSYM/
 *.h.gch
-*.
+*.o
