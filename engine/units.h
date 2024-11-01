@@ -6,13 +6,6 @@
 #include "utils/defines.h"
 #include "utils/arithmetic.h"
 
-// Knockbacks from going under an HP cutoff
-const int KB_DIST = 165, KB_DURATION = 12;
-// Knockbacks from ability procs and sniper the cat (small)
-const int PROC_KB_DIST = 345, PROC_KB_DURATION = 12;
-// Knockbacks from boss shockwaves (large)
-const int BOSS_KB_DIST = 705, BOSS_KB_DURATION = 47;
-
 const u16 TRAITLESS = BIT(0);
 const u16 RED_T = BIT(1);
 const u16 FLOATING = BIT(2);

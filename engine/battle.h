@@ -24,50 +24,38 @@ struct Unit {
     Unit(int id_, int hp_) : id(id_), uid(gen_uid()), hp(hp_) {}
 };
 
-struct UnitState {
-    bool is_cat;
-    int id, uid;
-    int hp, pos;
-    bool knockback;
-    float kb_frac;
-
-    UnitState(bool is_cat_, const Unit &unit) : is_cat(is_cat_), id(unit.id), uid(unit.uid),
-        hp(unit.hp), pos(unit.pos), knockback(unit.kb_f > 0),
-        kb_frac(float(KB_DURATION - unit.kb_f) / KB_DURATION) {}
-};
-
-struct StageData {
-    int width;
-    int cat_hp, enemy_hp;
+struct State {
+    int time = 0;
+    vector<Unit> cats, enemies;
 };
 
 struct Battle {
+    static constexpr int KB_DIST = 165, KB_DURATION = 165;
+
     int stage_width = 1000;
     int cat_limit = 50, enemy_limit = 50;
+    int cat_base_hp = 1000, enemy_base_hp = 2000;
 
-    int cbase_hp = 500, ebase_hp = 500;
-    
     bool save_logs = false;
     
     Battle() {}
 
-    int time = 0;
-    vector<Unit> cats, enemies;
-    vector<vector<UnitState>> logs;
+    State state;
+    vector<State> logs;
 
     void add_cat(int id) {
-        if (ssize(cats) < cat_limit) {
-            cats.emplace_back(id, cat_data[id].hp);
+        if (SZ(state.cats) < cat_limit) {
+            state.cats.emplace_back(id, cat_data[id].hp);
         }
     }
     void add_enemy(int id) {
-        if (ssize(enemies) < enemy_limit) {
-            enemies.emplace_back(id, enemy_data[id].hp);
+        if (SZ(state.enemies) < enemy_limit) {
+            state.enemies.emplace_back(id, enemy_data[id].hp);
         }
     }
 
     void action_step(vector<Unit> &units, vector<Unit> &opp_units, const UnitData *data, const UnitData *opp_data) {
-        int nxt = ssize(opp_units) - 1;
+        int nxt = SZ(opp_units) - 1;
         for (Unit &unit : units) {
             if (unit.kb_f) {
                 continue;
@@ -98,10 +86,10 @@ struct Battle {
                     if (!opp_units[i].kb_f) {
                         int cur = dmg;
                         if (opp_data[opp_units[i].id].strong & data[unit.id].traits) {
-                            cur /= 2;
+                            cur = floor(cur * 0.5);
                         }
                         if (opp_data[opp_units[i].id].traits & data[unit.id].strong) {
-                            cur = (cur * 3) / 2;
+                            cur = floor(cur * 1.5);
                         }
                         if (opp_data[opp_units[i].id].traits & data[unit.id].massive) {
                             cur *= 3;
@@ -135,40 +123,24 @@ struct Battle {
         }), units.end());
     }
 
-    void write_logs() {
-        logs.emplace_back();
-        for (const Unit &unit : cats) {
-            logs.back().emplace_back(1, unit);
-        }
-        for (const Unit &unit : enemies) {
-            logs.back().emplace_back(0, unit);
-        }
-        std::sort(ALL(logs.back()), [&](const UnitState &a, const UnitState &b) {
-            if (a.uid % 10 != b.uid % 10) {
-                return a.uid % 10 > b.uid % 10;
-            }
-            return a.uid < b.uid;
-        });
-    }
-
     void advance() {
         auto comp = [&](const Unit &a, const Unit &b) {
             return a.pos < b.pos;
         };
-        std::sort(ALL(cats), comp);
-        std::sort(ALL(enemies), comp);
+        std::sort(ALL(state.cats), comp);
+        std::sort(ALL(state.enemies), comp);
 
-        action_step(cats, enemies, cat_data, enemy_data);
-        action_step(enemies, cats, enemy_data, cat_data);
+        action_step(state.cats, state.enemies, cat_data, enemy_data);
+        action_step(state.enemies, state.cats, enemy_data, cat_data);
 
-        resolution_step(cats, cat_data);
-        resolution_step(enemies, enemy_data);
+        resolution_step(state.cats, cat_data);
+        resolution_step(state.enemies, enemy_data);
+
+        state.time++;
 
         if (save_logs) {
-            write_logs();
+            logs.emplace_back(state);
         }
-
-        time++;
     }
 };
 

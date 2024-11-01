@@ -7,7 +7,7 @@
 
 int main() {
     Battle b;
-    b.stage_width = 5000;
+    b.stage_width = 3000;
     b.save_logs = true;
 
     for (int i = 0; i < 5000; i++) {

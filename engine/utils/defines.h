@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #define ALL(x) (x).begin(), (x).end()
+#define SZ(x) int((x).size())
 
 #define BIT(x) (1 << (x))
 #define MASK(x) (BIT(x) - 1)
