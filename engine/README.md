@@ -20,3 +20,6 @@ Once we've done this, we no longer need to store those pieces of info.
 
 ### Blueprints
 This is just everything else. The reason for this name is because this set of data contains everything we need to construct a unit instance, plus a bit of extra info describing the unit's core behavior.
+
+### Why
+This lets us outsource the work of dealing with each unit's unique abilities to a precomputation process that we only run once, improving simulation speed and opening the door to convenient interfaces that would normally be prohibitively slow (when run in tight loops).
