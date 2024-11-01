@@ -72,8 +72,11 @@ with open('../raw/battlecats_db/cats.csv') as csvfile:
 
             mh = extract_multihit(desc)
             if mh:
-                cat["hit_damages"] = mh[0]
-                cat["hit_frames"] = mh[1]
+                cat['hit_damages'] = mh[0]
+                cat['hit_frames'] = mh[1]
+            else:
+                cat['hit_damages'] = [cat['attack']]
+                cat['hit_frames'] = [cat['foreswing']]
 
             for line in lines:
                 # Basic stuff part of many abilities
@@ -204,7 +207,7 @@ with open('../raw/battlecats_db/cats.csv') as csvfile:
                     }
                     for key, value in MATCHUP.items():
                         if key in line:
-                            cat[value] = {'targets': targets}
+                            cat[value] = targets
 
                     # Effects with only proc rate
                     PROC_ONLY = {
@@ -231,8 +234,9 @@ with open('../raw/battlecats_db/cats.csv') as csvfile:
                         cat['weaken'] = {'targets': targets, 'rate': rate, 'duration': duration, 'effect': int(weaken.group(1))}
 
 
+
 with open('../parsed/cats.json', 'w') as fp:
-    json.dump(cats, fp, indent=2)
+    json.dump(cats, fp, indent=4)
 
 print('Processing completed!')
 print(len(cats), "cats")

@@ -83,6 +83,9 @@ with open('../raw/battlecats_db/enemies.csv') as csvfile:
             if mh:
                 enemy["hit_damages"] = mh[0]
                 enemy["hit_frames"] = mh[1]
+            else:
+                enemy['hit_damages'] = [enemy['attack']]
+                enemy['hit_frames'] = [enemy['foreswing']]
 
             for line in lines:
                 # Basic stuff part of many abilities
@@ -201,7 +204,7 @@ with open('../raw/battlecats_db/enemies.csv') as csvfile:
 
 
 with open('../parsed/enemies.json', 'w') as fp:
-    json.dump(enemies, fp, indent=2)
+    json.dump(enemies, fp, indent=4)
 
 print('Processing completed!')
 print(len(enemies), "enemies")
