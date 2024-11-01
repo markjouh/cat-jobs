@@ -3,7 +3,7 @@
 
 #include "raylib.h"
 #include "battle.h"
-#include "view_replay.h"
+#include "viewer.h"
 
 int main() {
     Battle b;

@@ -7,8 +7,6 @@
 #include <iostream>
 #include <cmath>
 
-using std::vector;
-
 #include "utils/defines.h"
 #include "utils/arithmetic.h"
 #include "utils/random.h"
@@ -26,7 +24,7 @@ struct Unit {
 
 struct State {
     int time = 0;
-    vector<Unit> cats, enemies;
+    std::vector<Unit> cats, enemies;
 };
 
 struct Battle {
@@ -41,7 +39,7 @@ struct Battle {
     Battle() {}
 
     State state;
-    vector<State> logs;
+    std::vector<State> logs;
 
     void add_cat(int id) {
         if (SZ(state.cats) < cat_limit) {
@@ -54,7 +52,7 @@ struct Battle {
         }
     }
 
-    void action_step(vector<Unit> &units, vector<Unit> &opp_units, const UnitData *data, const UnitData *opp_data) {
+    void action_step(std::vector<Unit> &units, std::vector<Unit> &opp_units, const UnitData *data, const UnitData *opp_data) {
         int nxt = SZ(opp_units) - 1;
         for (Unit &unit : units) {
             if (unit.kb_f) {
@@ -104,7 +102,7 @@ struct Battle {
         }
     }
 
-    void resolution_step(vector<Unit> &units, const UnitData *data) {
+    void resolution_step(std::vector<Unit> &units, const UnitData *data) {
         units.erase(std::remove_if(ALL(units), [&](Unit &unit) {
             unit.kb_f -= unit.kb_f > 0;
 
